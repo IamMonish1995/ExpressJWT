@@ -20,12 +20,12 @@ class UserController {
               email: email,
               password: hashPassword,
               tc: tc,
-              role:"Player"
+              role: "Player"
             })
             await doc.save()
             const saved_user = await UserModel.findOne({ email: email })
             // Generate JWT Token
-            const token = jwt.sign({ userID: saved_user._id ,email:saved_user.email,role:saved_user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            const token = jwt.sign({ userId: saved_user._id, email: saved_user.email, role: saved_user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
             res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
           } catch (error) {
             console.log(error)
@@ -49,7 +49,7 @@ class UserController {
           const isMatch = await bcrypt.compare(password, user.password)
           if ((user.email === email) && isMatch) {
             // Generate JWT Token
-            const token = jwt.sign({ userID: user._id , email:user.email , role:user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            const token = jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
             res.send({ "status": "success", "message": "Login Success", "token": token })
           } else {
             res.send({ "status": "failed", "message": "Email or Password is not Valid" })
