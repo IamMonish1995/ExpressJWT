@@ -16,7 +16,7 @@ const academySchema = new mongoose.Schema({
     sportsList: { type: Array},
     password: { type: String, required: true, trim: true },
 })
-
+academySchema.index({ '$**': 'text' })
 // Model
 const AcademyModel = mongoose.model("academy", academySchema)
 

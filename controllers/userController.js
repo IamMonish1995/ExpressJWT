@@ -4,7 +4,9 @@ import jwt from 'jsonwebtoken'
 import transporter from '../config/emailConfig.js'
 
 class UserController {
+  //  ADD NEW USER
   static userRegistration = async (req, res) => {
+    console.log("user registration called")
     const { name, email, password, password_confirmation, tc } = req.body
     const user = await UserModel.findOne({ email: email })
     if (user) {
@@ -39,6 +41,7 @@ class UserController {
     }
   }
 
+  //  LOGIN USER
   static userLogin = async (req, res) => {
     try {
       const { email, password } = req.body
@@ -64,7 +67,9 @@ class UserController {
     }
   }
 
+  // CHANGE USER PASSWORD
   static changeUserPassword = async (req, res) => {
+    console.log("change user password called")
     const { password, password_confirmation } = req.body
     if (password && password_confirmation) {
       if (password !== password_confirmation) {
@@ -80,11 +85,22 @@ class UserController {
     }
   }
 
+  // lOGGED USER DETAILS
   static loggedUser = async (req, res) => {
+    console.log("loged user called")
     res.send({ "user": req.user })
   }
 
+  // GET ALL USERS
+  static getAllUser = async (req, res) => {
+    console.log("get all users called");
+    const users = await UserModel.find().select('-password')
+    res.send(users)
+  }
+
+  // SEND PASSWORD RESET EMAIL
   static sendUserPasswordResetEmail = async (req, res) => {
+    console.log("send User password reset called")
     const { email } = req.body
     if (email) {
       const user = await UserModel.findOne({ email: email })
@@ -109,7 +125,9 @@ class UserController {
     }
   }
 
+  // USER PASSWORD RESET
   static userPasswordReset = async (req, res) => {
+    console.log("user password reset called")
     const { password, password_confirmation } = req.body
     const { id, token } = req.params
     const user = await UserModel.findById(id)
